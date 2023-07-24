@@ -1,51 +1,23 @@
 section .data
-    fib_num equ 10         ; Set the value of n (the desired Fibonacci number)
-
-section .bss
-    fib_result resd 1      ; Reserve space to store the result (32-bit integer)
+    num1 db 10        ; First number (change the value as needed)
+    num2 db 20        ; Second number (change the value as needed)
+    result db 0       ; Variable to store the sum, initialized to 0
 
 section .text
-    global _start
+    global _start     ; Entry point for the program
 
 _start:
-    ; Check if fib_num is 0 or 1
-    cmp byte [fib_num], 0
-    je fib_0
-    cmp byte [fib_num], 1
-    je fib_1
+    ; Load the values of num1 and num2 into registers
+    mov al, [num1]    ; Move the value of num1 into the AL register
+    mov bl, [num2]    ; Move the value of num2 into the BL register
 
-    ; Initialize the Fibonacci sequence
-    mov eax, 0          ; First Fibonacci number
-    mov ebx, 1          ; Second Fibonacci number
+    ; Add the two numbers
+    add al, bl        ; Add the values in AL and BL registers
 
-    ; Loop to calculate the nth Fibonacci number
-    mov ecx, byte [fib_num] ; Load the value of n into the counter
-    dec ecx             ; Decrement by 1 because we already have the first two numbers
-fib_loop:
-    add eax, ebx        ; Calculate next Fibonacci number: eax = eax + ebx
-    mov ebx, eax        ; Update ebx to store the previous Fibonacci number
-    dec ecx             ; Decrement the counter
-    jnz fib_loop        ; Repeat the loop until ecx becomes zero
+    ; Store the result in the 'result' variable
+    mov [result], al  ; Move the value in AL into the 'result' variable
 
-    ; Store the result (nth Fibonacci number) in fib_result
-    mov dword [fib_result], eax  ; Use "dword" size specifier to store the 32-bit value
-
-    ; Exit the program
-    mov eax, 1          ; syscall number for exit
-    xor ebx, ebx        ; status code 0
-    int 0x80
-
-fib_0:
-    ; If n is 0, the result is 0
-    mov dword [fib_result], 0   ; Use "dword" size specifier to store the 32-bit value
-    jmp exit_program
-
-fib_1:
-    ; If n is 1, the result is 1
-    mov dword [fib_result], 1   ; Use "dword" size specifier to store the 32-bit value
-
-exit_program:
-    ; Exit the program
-    mov eax, 1          ; syscall number for exit
-    xor ebx, ebx        ; status code 0
-    int 0x80
+    ; Terminate the program
+    mov eax, 1        ; syscall number for 'exit'
+    xor ebx, ebx      ; exit code 0
+    int 0x80          ; Call the kernel to exit the program
