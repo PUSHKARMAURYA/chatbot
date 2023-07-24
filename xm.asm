@@ -2,7 +2,7 @@ section .data
     fib_num equ 10         ; Set the value of n (the desired Fibonacci number)
 
 section .bss
-    fib_result resb 8      ; Reserve space to store the result (64-bit integer)
+    fib_result resq 8      ; Reserve space to store the result (64-bit integer)
 
 section .text
     global _start
